@@ -112,6 +112,7 @@ public class Flight {
         return bookings;
     }
 
+
     public void addBookings(Booking booking) {
          bookings.add(booking);
     }
@@ -121,6 +122,10 @@ public class Flight {
     }
     public void addWaitList(Booking booking) {
         waitLsit.offer(booking);
+    }
+
+    public void addTickets(Ticket ticket){
+        tickets.add(ticket);
     }
 
     public ArrayList<com.crimsonlogic.arilinemanangmentsystem.model.Ticket> getTicket() {
