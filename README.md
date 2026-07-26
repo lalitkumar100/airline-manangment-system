@@ -1,0 +1,128 @@
+# Airline Management System
+
+**Simple Java console application for managing flights, bookings, passengers, and related domain objects.**
+
+This repository contains a Java-based console application that models an airline management system. The application is organized into domain models, services that implement business logic, utility helpers (input, validation, id generation, menu UI), and custom exceptions for validation and error handling.
+
+## Stack
+- Language: Java (source files under `src/`)
+- Runtime: plain Java (no build tool detected such as Maven or Gradle)
+- Notable packages: domain models (`model`), services (`service`), utilities (`utility`), exceptions (`exception`)
+
+## Key features
+- Create and manage Flights, Routes, Airports, and Aircraft
+- Create Bookings and Tickets for Passengers
+- Payment and Refund handling
+- Loyalty account tracking
+- Revenue reporting and streaming task service utilities
+- Input validation utilities and ID generation helpers
+
+## Project structure (top-level important files/directories)
+```
+README.md                       <-- (this file)
+.gitignore
+Airline Managing System.iml
+src/
+  Main.java                      <-- application entry (runs Menu)
+  com/crimsonlogic/arilinemanangmentsystem/
+    exception/                   <-- custom exceptions
+      InvalidCrewException.java
+      InvalidHumanException.java
+      InvalidInputException.java
+      RecordNotFoundException.java
+      ValidationException.java
+    model/                       <-- domain model classes
+      Aircraft.java
+      Airport.java
+      Booking.java
+      Crew.java
+      Flight.java
+      LoyaltyAccount.java
+      Passenger.java
+      Payment.java
+      Refund.java
+      RevenueReport.java
+      Route.java
+      Seat.java
+      Ticket.java
+    service/                     <-- business logic services
+      AirportAndAircraftService.java
+      BookingService.java
+      FlightService.java
+      PassengerService.java
+      RevenueReportService.java
+      StreamTaskService.java
+      TicketSercive.java
+    utility/                     <-- helpers and UI
+      FlightValidator.java
+      IdGenerator.java
+      InputUtil.java
+      Menu.java
+      ValidatorUtil.java
+```
+
+Notes:
+- The Java source tree uses the package path `com.crimsonlogic.arilinemanangmentsystem` (note: folder name contains the current spelling from the repository).
+- I inspected representative files such as `Main.java`, model classes, services, utilities, and exceptions to prepare this README.
+
+## How to build and run
+There is no build configuration file (pom.xml or build.gradle) in the repository. To compile and run the project using a standard Java toolchain, use the following steps from the repository root.
+
+Prerequisites:
+- Java SDK (JDK) 8+ installed and `javac` / `java` available on PATH.
+
+Compile all .java files and run Main:
+
+```bash
+# from repository root
+find src -name "*.java" > sources.txt
+javac -d out @sources.txt
+# run the Main class (use the fully-qualified package name if Main is in a package)
+java -cp out Main
+```
+
+If `Main.java` is in a package (or the code references a package path), you may need to run it using its fully-qualified class name, for example:
+
+```bash
+# example if Main is declared with package com.crimsonlogic.arilinemanangmentsystem;
+java -cp out com.crimsonlogic.arilinemanangmentsystem.Main
+```
+
+If compilation fails due to package / folder structure mismatches, make sure the directory layout under `src/` matches declared package statements in the .java files.
+
+## Running with an IDE
+- Import the project as a plain Java project into IntelliJ IDEA, Eclipse, or VSCode Java extensions. The repository contains an IntelliJ module file (`Airline Managing System.iml`) which may help with IntelliJ.
+
+## Important classes (overview)
+- Main / Menu: console entry-point and interactive UI
+- Model: Aircraft, Airport, Route, Flight, Seat, Passenger, Booking, Ticket, Payment, Refund, LoyaltyAccount, RevenueReport
+- Service: FlightService, BookingService, PassengerService, AirportAndAircraftService, RevenueReportService, StreamTaskService, TicketSercive
+- Utility: InputUtil (console input helpers), IdGenerator (unique id creation), ValidatorUtil / FlightValidator
+- Exception: ValidationException and specialized exceptions (InvalidInputException, InvalidHumanException, InvalidCrewException), RecordNotFoundException
+
+## Known issues / notes
+- There is no build file (Maven/Gradle); the repo uses plain source files. Adding a build system (Maven or Gradle) would make compilation and dependency management easier.
+- The package path directory name `arilinemanangmentsystem` appears in the tree; verify package declarations in source files if you reorganize folders.
+- I did not find unit tests or test frameworks in the repository.
+
+## Suggested next steps
+- Add a `pom.xml` or `build.gradle` to make building and running easier.
+- Add a CI workflow to compile and (later) test the project.
+- Add example data or a seed script to exercise the application quickly.
+- Optionally add a UML/diagram (I can add a Mermaid diagram file if you want).
+
+## Contributing
+Contributions are welcome. Suggested workflow:
+1. Fork the repository
+2. Create a feature branch
+3. Run and test your changes locally
+4. Open a pull request with a clear description of the change
+
+## Contact / Author
+Repository owner: @lalitkumar100 (GitHub)
+
+---
+
+If you want, I can commit this README.md into the repository now. I can also:
+- add the Mermaid UML diagram file I prepared earlier as `uml_class_diagram.mmd`, or
+- create a Maven pom.xml and a basic project structure so the code builds cleanly with Maven.
