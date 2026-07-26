@@ -1,9 +1,7 @@
 package com.crimsonlogic.arilinemanangmentsystem.utility;
 
-import com.crimsonlogic.arilinemanangmentsystem.service.AirportAndAircraftService;
-import com.crimsonlogic.arilinemanangmentsystem.service.BookingService;
-import com.crimsonlogic.arilinemanangmentsystem.service.FlightService;
-import com.crimsonlogic.arilinemanangmentsystem.service.PassengerService;
+import com.crimsonlogic.arilinemanangmentsystem.model.RevenueReport;
+import com.crimsonlogic.arilinemanangmentsystem.service.*;
 import com.crimsonlogic.arilinemanangmentsystem.utility.InputUtil;
 
 public class Menu {
@@ -19,6 +17,10 @@ public class Menu {
             new FlightService(airportAircraftService);
 
     private final BookingService bookingService = new BookingService(airportAircraftService,flightService,passengerService);
+    private  final TicketSercive ticketSercive = new TicketSercive(flightService);
+    private final RevenueReportService revenueReportService = new RevenueReportService(flightService);
+    private final  StreamTaskService streamTaskService = new StreamTaskService(flightService, airportAircraftService,bookingService,passengerService,revenueReportService);
+
 
     /**
      * Starts the Airline Management System.
@@ -28,6 +30,7 @@ public class Menu {
         airportAircraftService.initializeDemoData();
         flightService.initializeDemoFlights();
         passengerService.initializeDemoPassengers();
+        bookingService.initializeDemoBookings();
 
         while (true) {
 
@@ -36,6 +39,7 @@ public class Menu {
             System.out.println("==========================================");
             System.out.println("1. Admin");
             System.out.println("2. Passenger");
+            System.out.println("3. Stream");
             System.out.println("0. Exit");
 
             int choice = input.getInt("Enter Choice : ");
@@ -48,6 +52,9 @@ public class Menu {
 
                 case 2:
                     passengerMenu();
+                    break;
+                case 3:
+                    streamTaskService.streamMenu();
                     break;
 
                 case 0:
@@ -69,8 +76,7 @@ public class Menu {
 
             System.out.println("\n========== ADMIN MENU ==========");
             System.out.println("1. Flight Management");
-            System.out.println("2. Airport Management");
-            System.out.println("3. Aircraft Management");
+            System.out.println("2.  Report & Booking");
             System.out.println("0. Back");
 
             int choice = input.getInt("Enter Choice : ");
@@ -82,11 +88,7 @@ public class Menu {
                     break;
 
                 case 2:
-                    System.out.println("Coming Soon...");
-                    break;
-
-                case 3:
-                    System.out.println("Coming Soon...");
+                    ReportandBookingMenu();
                     break;
 
                 case 0:
@@ -111,6 +113,7 @@ public class Menu {
             System.out.println("3. Remove Flight");
             System.out.println("4. Search Flight");
             System.out.println("5. Display All Flights");
+            System.out.println("6.  Ticket Managment ");
             System.out.println("0. Back");
 
             int choice = input.getInt("Enter Choice : ");
@@ -136,6 +139,9 @@ public class Menu {
                 case 5:
                     flightService.displayAllFlights();
                     break;
+                case 6:
+                    ticketSercive.generateTickets();
+                    break;
 
                 case 0:
                     return;
@@ -159,6 +165,8 @@ public class Menu {
             System.out.println("3. Cancel Booking");
             System.out.println("4. View Ticket");
             System.out.println("5. Register ");
+            System.out.println("6. Genrate onBoarding Pass");
+            System.out.println("7. check in");
             System.out.println("0. Back");
 
             int choice = input.getInt("Enter Choice : ");
@@ -174,15 +182,22 @@ public class Menu {
                     break;
 
                 case 3:
-                    System.out.println("Coming Soon...");
+                    bookingService.cancelBooking();
                     break;
 
                 case 4:
-                    System.out.println("Coming Soon...");
+                    bookingService.displayBookingById();
                     break;
 
                 case 5:
                     passengerService.registerPassenger();
+                    break;
+
+                case 6:
+                    bookingService.gernateOnboardingPass();
+                    break;
+                case 7:
+                    bookingService.checkIn();
                     break;
 
                 case 0:
@@ -193,4 +208,44 @@ public class Menu {
             }
         }
     }
+    private void ReportandBookingMenu() {
+
+        while (true) {
+
+            System.out.println("\n========== FLIGHT MANAGEMENT ==========");
+            System.out.println("1. All Booking ");
+            System.out.println("2. Booking of Flight");
+            System.out.println("3. find Booking by Id ");
+            System.out.println("4. Renuve Report");
+            System.out.println("0. Back");
+
+            int choice = input.getInt("Enter Choice : ");
+
+            switch (choice) {
+
+                case 1:
+                    bookingService.displayAllBookings();
+                    break;
+
+                case 2:
+                    bookingService.displayBookingsByFlight();
+                    break;
+
+                case 3:
+                    bookingService.displayBookingById();
+                    break;
+                case 4:
+                    revenueReportService.revenueMenu();
+                    break;
+
+                case 0:
+                    return;
+
+                default:
+                    System.out.println("Invalid Choice.");
+            }
+        }
+    }
+
+
 }

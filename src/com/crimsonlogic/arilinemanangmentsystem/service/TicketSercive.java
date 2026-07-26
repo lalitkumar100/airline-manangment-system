@@ -13,6 +13,7 @@ public class TicketSercive {
 
     InputUtil input = new InputUtil();
     HashMap<String, Ticket>  TicketHashMap = new HashMap<>();
+
    FlightService flightService;
     public TicketSercive(FlightService flightService){
      this.flightService=flightService;
@@ -124,9 +125,9 @@ public class TicketSercive {
 
             Ticket ticket =
                     new Ticket(booking.getAmount(), seat);
-
+            booking.setTicket(ticket);
             flight.addTickets(ticket);
-
+            booking.setBookingstatus(Booking.STATUS_CONFIRMED);
             System.out.println("------------------------------------------");
             booking.displayInfo();
             System.out.println("Ticket ID : " + ticket.getTicketId());

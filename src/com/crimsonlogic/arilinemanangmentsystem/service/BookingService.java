@@ -1,10 +1,7 @@
 package com.crimsonlogic.arilinemanangmentsystem.service;
 
 import com.crimsonlogic.arilinemanangmentsystem.exception.RecordNotFoundException;
-import com.crimsonlogic.arilinemanangmentsystem.model.Booking;
-import com.crimsonlogic.arilinemanangmentsystem.model.Flight;
-import com.crimsonlogic.arilinemanangmentsystem.model.Passenger;
-import com.crimsonlogic.arilinemanangmentsystem.model.Payment;
+import com.crimsonlogic.arilinemanangmentsystem.model.*;
 import com.crimsonlogic.arilinemanangmentsystem.utility.IdGenerator;
 import com.crimsonlogic.arilinemanangmentsystem.utility.InputUtil;
 
@@ -390,14 +387,17 @@ public class BookingService {
 
         System.out.println("\n============================ ALL BOOKINGS ============================");
 
-        System.out.printf("%-10s %-10s %-10s %-8s %-10s %-15s %-20s%n",
+        System.out.printf(
+                "%-10s %-10s %-10s %-8s %-10s %-15s %-20s %-80s%n",
                 "Book ID",
                 "Pass ID",
                 "Flight",
                 "Seat",
                 "Amount",
                 "Status",
-                "Booking Time");
+                "Booking Time",
+                "Check In");
+
 
         System.out.println("----------------------------------------------------------------------");
 
@@ -453,6 +453,338 @@ public class BookingService {
         }
     }
 
+    public void displayBookingById() {
+
+        displayAllBookings();
+
+        while (true) {
+
+            try {
+
+                String bookingId =
+                        input.getString("Enter Booking ID (0 to Cancel) : ");
+
+                if (bookingId.equals("0")) {
+                    return;
+                }
+
+                Booking booking = getBookingById(bookingId);
+
+                System.out.println("\n========== BOOKING DETAILS ==========");
+                booking.displayInfo();
+
+                return;
+
+            } catch (Exception e) {
+
+                System.out.println(e.getMessage());
+                System.out.println("Please enter a valid Booking ID.");
+            }
+        }
+    }
+
+    public void gernateOnboardingPass(){
+        Booking booking;
+        while (true) {
+
+            String bookingId =
+                    input.getString("Enter Booking ID (0 to Cancel) : ");
+
+            if (bookingId.equals("0")) {
+                return;
+            }
+
+            try {
+
+                booking = getBookingById(bookingId);
+                break;
+
+            } catch (Exception e) {
+
+                System.out.println(e.getMessage());
+            }
+        }
+        System.out.println("==============Booking =======================");
+        booking.displayInfo();
+
+        if (booking.getBookingstatus().equals(Booking.STATUS_WAITLIST)){
+            System.out.println("Sorry!!  your are in WaitList so we can't provide you onBoarding pass");
+            return;
+        }
+        //create good look pass
+        System.out.println("Seat no :"+booking.getTicket().getSeat().getSeatNo());
+    }
 
 
-}
+    /**
+     * Cancels a booking.
+     */
+    public void cancelBooking() {
+
+        try {
+
+            Booking booking = readBooking();
+
+            if (booking == null) {
+                return;
+            }
+
+            Flight flight = booking.getFlightBooked();
+
+            if (flight.getStatus().equalsIgnoreCase(Flight.STATUS_FLEW)) {
+
+                System.out.println("Flight already Flew.");
+                return;
+            }
+
+            if (flight.getStatus().equalsIgnoreCase(Flight.STATUS_CANCELLED)) {
+
+                System.out.println("Flight is Cancelled.");
+                return;
+            }
+
+            if (booking.getBookingstatus().equalsIgnoreCase("WaitList")) {
+
+                cancelWaitingBooking(booking);
+
+            } else {
+
+                cancelConfirmedBooking(booking);
+            }
+           Refund.refundArrayList.add(new Refund(booking.getAmount(),booking));
+
+
+        } catch (Exception e) {
+
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /**
+     * Reads a valid booking.
+     */
+    private Booking readBooking() {
+
+        displayAllBookings();
+
+        while (true) {
+
+            String bookingId =
+                    input.getString("Enter Booking ID (0 to Cancel) : ");
+
+            if (bookingId.equals("0")) {
+                return null;
+            }
+
+            try {
+
+                return getBookingById(bookingId);
+
+            } catch (Exception e) {
+
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+    /**
+     * Cancels waiting booking.
+     */
+    private void cancelWaitingBooking(Booking booking) {
+
+        Flight flight = booking.getFlightBooked();
+
+        flight.removeBooking(booking);
+
+        booking.getPassenger()
+                .getLoyalty()
+                .update(booking.getSeatType(), false);
+        booking.setBookingstatus(Booking.STATUS_CANCELLED);
+
+        System.out.println("Booking Cancelled Successfully.");
+    }
+    /**
+     * Cancels confirmed booking.
+     */
+    private void cancelConfirmedBooking(Booking booking) throws RecordNotFoundException {
+
+        Flight flight = booking.getFlightBooked();
+
+        Ticket oldTicket = findTicket(booking);
+
+        flight.removeBooking(booking);
+
+        booking.getPassenger()
+                .getLoyalty()
+                .update(booking.getSeatType(), false);
+
+        Booking nextBooking =
+                flight.getNextWaitingPassenger();
+
+        if (nextBooking == null) {
+
+            flight.removeTicket(oldTicket);
+
+            System.out.println("Booking Cancelled.");
+            System.out.println("Seat is now Empty.");
+
+            return;
+        }
+
+        nextBooking.setBookingstatus("Confirmed");
+
+        Ticket newTicket =
+                new Ticket(
+                        nextBooking.getAmount(),
+                        oldTicket.getSeat());
+
+        flight.removeTicket(oldTicket);
+
+        flight.addTickets(newTicket);
+
+        System.out.println("Ticket transferred successfully.");
+
+        nextBooking.displayInfo();
+    }
+
+    /**
+     * Finds ticket of a confirmed booking.
+     */
+    private Ticket findTicket(Booking booking)
+            throws RecordNotFoundException {
+
+        Flight flight = booking.getFlightBooked();
+
+        for (Ticket ticket : flight.getTickets()) {
+
+            if (ticket.getSeat().getSeatNo()
+                    == booking.getTicket().getSeat().getSeatNo()) {
+
+                return ticket;
+            }
+        }
+
+        throw new RecordNotFoundException("Ticket not found.");
+    }
+
+    /**
+     * Inserts demo bookings.
+     */
+    public void initializeDemoBookings() {
+
+        try {
+
+            Flight flight1 = flightService.findFlightById("FL001");
+            Flight flight2 = flightService.findFlightById("FL002");
+
+            Passenger passenger1 =
+                    passengerService.getPassengerById("PAS1001");
+
+            Passenger passenger2 =
+                    passengerService.getPassengerById("PAS1002");
+
+            Passenger passenger3 =
+                    passengerService.getPassengerById("PAS1003");
+
+            Passenger passenger4 =
+                    passengerService.getPassengerById("PAS1004");
+
+            Passenger passenger5 =
+                    passengerService.getPassengerById("PAS1005");
+
+            addDemoBooking(flight1, passenger1, "A");
+            addDemoBooking(flight1, passenger2, "B");
+            addDemoBooking(flight1, passenger3, "C");
+
+            addDemoBooking(flight2, passenger4, "A");
+            addDemoBooking(flight2, passenger5, "C");
+
+        } catch (Exception e) {
+
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /**
+     * Creates and stores a demo booking.
+     */
+    private void addDemoBooking(
+            Flight flight,
+            Passenger passenger,
+            String seatType) {
+
+        double amount;
+
+        switch (seatType.toUpperCase()) {
+
+            case "A":
+                amount = flight.getBaseFare() * 1.50;
+                break;
+
+            case "B":
+                amount = flight.getBaseFare() * 1.20;
+                break;
+
+            default:
+                amount = flight.getBaseFare();
+        }
+
+        Payment payment = new Payment(
+                amount,
+                true);
+
+        Booking booking = new Booking(
+                IdGenerator.generateBookingId(),
+                passenger,
+                flight,
+                seatType,
+                amount,
+                payment);
+
+        payment.setBooking(booking);
+
+        bookingList.add(booking);
+
+        bookingHashMap.put(
+                booking.getBookingId(),
+                booking);
+
+        flight.addBookings(booking);
+
+        flight.addWaitList(booking);
+
+        passenger.getLoyalty().update(
+                seatType,
+                true);
+    }
+
+
+    public void checkIn(){
+        while (true) {
+
+            String bookingId =
+                    input.getString("Enter Booking ID (0 to Cancel) : ");
+
+            if (bookingId.equals("0")) {
+                return ;
+            }
+
+            try {
+                Booking booking = getBookingById(bookingId);
+                 if(booking.getBookingstatus().equals(Booking.STATUS_CONFIRMED)) {
+
+                     booking.passengerCheckIn = true;
+                     System.out.println("Passenger with id" + booking.getBookingId() + " is check in");
+                 }
+                     else {
+                     System.out.println("Passenger with id" + booking.getBookingId() + "can't is check in because ticket is not "+Booking.STATUS_CONFIRMED);
+                 }
+            } catch (Exception e) {
+
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+    }
+
+
+

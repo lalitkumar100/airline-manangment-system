@@ -19,6 +19,12 @@ public class Booking implements Comparable<Booking> {
 
      private String Bookingstatus;
 
+     private Ticket ticket;
+
+     public boolean passengerCheckIn;
+
+
+
     private String SeatType;
     private double amount;
     private Payment payment;
@@ -98,6 +104,16 @@ public class Booking implements Comparable<Booking> {
         this.payment = payment;
     }
 
+    public Ticket getTicket() {
+        return ticket;
+    }
+
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
+    }
+
+
+
 
     @Override
     public int compareTo(Booking other) {
@@ -110,14 +126,15 @@ public class Booking implements Comparable<Booking> {
     public String toString() {
 
         return String.format(
-                "%-10s %-10s %-10s %-8s %-10.2f %-15s %-20s",
+                "%-10s %-10s %-10s %-8s %-10.2f %-15s %-20s %-10sn",
                 bookingId,
                 passenger.getPassengerId(),
                 flightBooked.getFlightId(),
                 SeatType,
                 amount,
                 Bookingstatus,
-                bookingDateTime);
+                bookingDateTime,
+                passengerCheckIn?"check-in":"check-out");
     }
 
     /**

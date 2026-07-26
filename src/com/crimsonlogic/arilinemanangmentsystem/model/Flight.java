@@ -10,6 +10,7 @@ public class Flight {
     public static final String STATUS_DELAYED = "Delayed";
     public static final String STATUS_CANCELLED = "Cancelled";
     public static final String STATUS_COMPLETED = "Completed";
+    public  static  final  String STATUS_FLEW = "Flew";
 
     private String flightId;
 
@@ -24,7 +25,7 @@ public class Flight {
     private ArrayList<Seat> seats;
     private  final ArrayList<Booking> bookings= new ArrayList<>()  ;
     private final PriorityQueue<Booking> waitLsit = new PriorityQueue<>();
-    private ArrayList<Ticket> tickets ;
+    private ArrayList<Ticket> tickets  = new ArrayList<>(); ;
     private double baseFare;
     private String status;
 
@@ -112,7 +113,9 @@ public class Flight {
         return bookings;
     }
 
-
+    public ArrayList<Ticket> getTickets() {
+        return tickets;
+    }
     public void addBookings(Booking booking) {
          bookings.add(booking);
     }
@@ -127,6 +130,8 @@ public class Flight {
     public void addTickets(Ticket ticket){
         tickets.add(ticket);
     }
+
+
 
     public ArrayList<com.crimsonlogic.arilinemanangmentsystem.model.Ticket> getTicket() {
         return tickets;
@@ -166,5 +171,61 @@ public class Flight {
         System.out.println("Departure          : " + departureDateTime);
         System.out.println("Arrival            : " + arrivalDateTime);
         System.out.println("Status             : " + status);
+    }
+
+    public void  cancelTicketandNew(){
+
+    }
+
+
+    /**
+     * Removes a ticket from the flight.
+     */
+    public void removeTicket(Ticket ticket) {
+
+        tickets.remove(ticket);
+    }
+
+    /**
+     * Removes a booking from the flight.
+     */
+    public void removeBooking(Booking booking) {
+
+        bookings.remove(booking);
+        waitLsit.remove(booking);
+    }
+
+    /**
+     * Returns ticket having the given seat.
+     */
+    public Ticket getTicketBySeat(Seat seat) {
+
+        for (Ticket ticket : tickets) {
+
+            if (ticket.getSeat().equals(seat)) {
+                return ticket;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns next passenger from waiting list.
+     */
+    public Booking getNextWaitingPassenger() {
+
+        while (!waitLsit.isEmpty()) {
+
+            Booking booking = waitLsit.poll();
+
+            if (bookings.contains(booking)
+                    && booking.getBookingstatus().equalsIgnoreCase("WaitList")) {
+
+                return booking;
+            }
+        }
+
+        return null;
     }
 }
