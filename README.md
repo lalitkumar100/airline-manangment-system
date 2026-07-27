@@ -231,6 +231,197 @@ flowchart TD
     Passenger --> UC15
     Passenger --> UC16
 ```
+
+
+
+```mermaid
+classDiagram
+
+class Passenger{
+    -String passengerId
+    -String name
+    -String email
+    -String phone
+    -LoyaltyAccount loyalty
+    +displayInfo()
+}
+
+class LoyaltyAccount{
+    -int points
+    -String tier
+    +update(String, boolean)
+    +displayInfo()
+}
+
+class Flight{
+    +String STATUS_SCHEDULED
+    +String STATUS_DELAYED
+    +String STATUS_CANCELLED
+    +String STATUS_COMPLETED
+
+    -String flightId
+    -Airport source
+    -Airport destination
+    -LocalDateTime departureDateTime
+    -LocalDateTime arrivalDateTime
+    -Aircraft aircraft
+    -double baseFare
+    -String status
+
+    -ArrayList~Booking~ bookings
+    -PriorityQueue~Booking~ waitList
+    -ArrayList~Ticket~ tickets
+
+    +addBookings(Booking)
+    +addWaitList(Booking)
+    +addTickets(Ticket)
+    +displayInfo()
+}
+
+class Airport{
+    -String airportCode
+    -String airportName
+    -String city
+    +displayInfo()
+}
+
+class Aircraft{
+    -String aircraftId
+    -String model
+    -int capacity
+    +displayInfo()
+}
+
+class Booking{
+    +String STATUS_WAITLIST
+    +String STATUS_CONFIRMED
+    +String STATUS_CANCELLED
+
+    -String bookingId
+    -Passenger passenger
+    -Flight flightBooked
+    -LocalDateTime bookingDateTime
+    -String bookingStatus
+    -String seatType
+    -double amount
+    -Payment payment
+    +displayInfo()
+}
+
+class Payment{
+    -String paymentId
+    -double amount
+    -boolean paid
+    -Booking booking
+    +displayInfo()
+}
+
+class Refund{
+    -String refundId
+    -double amount
+    -Booking booking
+}
+
+class Ticket{
+    -String ticketId
+    -double fare
+    -Seat seat
+}
+
+class Seat{
+    -int seatNo
+    -char seatType
+    -boolean available
+    -boolean upgraded
+}
+
+class RevenueReport{
+    -String flightId
+    -double totalBookingAmount
+    -double totalRefundAmount
+    -double netRevenue
+    +displayInfo()
+}
+
+class AirportAircraftService{
+    -HashMap airports
+    -HashMap aircrafts
+    +initializeDemoData()
+    +displayAllAirports()
+    +displayAllAircraft()
+    +getAirportByCode()
+    +getAircraftById()
+}
+
+class PassengerService{
+    -HashMap passengers
+    +initializeDemoPassengers()
+    +registerPassenger()
+    +getPassengerById()
+}
+
+class FlightService{
+    -List~Flight~ flightList
+    +initializeDemoFlights()
+    +addFlight()
+    +updateFlight()
+    +removeFlight()
+    +displayAllFlights()
+    +searchFlightMenu()
+    +findFlightById()
+}
+
+class BookingService{
+    -ArrayList~Booking~ bookingList
+    -HashMap bookingHashMap
+    +initializeDemoBookings()
+    +bookFlight()
+    +cancelBooking()
+    +updateSeats()
+    +displayAllBookings()
+    +displayBookingByFlight()
+    +getBookingById()
+}
+
+class ReportService{
+    +flightRevenue()
+    +totalRevenue()
+}
+
+class StreamTaskService{
+    +listAvailableFlights()
+    +filterByDestination()
+    +groupByDestination()
+    +highestFare()
+    +lowestFare()
+    +averageFare()
+}
+
+Passenger "1" --> "1" LoyaltyAccount
+Booking "*" --> "1" Passenger
+Booking "*" --> "1" Flight
+Booking "1" --> "1" Payment
+Refund "*" --> "1" Booking
+Ticket "*" --> "1" Seat
+Flight "1" --> "1" Airport : source
+Flight "1" --> "1" Airport : destination
+Flight "1" --> "1" Aircraft
+Flight "1" --> "*" Booking
+Flight "1" --> "*" Ticket
+Flight "1" --> "*" Seat
+
+PassengerService --> Passenger
+FlightService --> Flight
+AirportAircraftService --> Airport
+AirportAircraftService --> Aircraft
+BookingService --> Booking
+BookingService --> Flight
+BookingService --> Passenger
+ReportService --> RevenueReport
+StreamTaskService --> FlightService
+StreamTaskService --> BookingService
+StreamTaskService --> PassengerService
+```
 ## Known issues / notes
 - There is no build file (Maven/Gradle); the repo uses plain source files. Adding a build system (Maven or Gradle) would make compilation and dependency management easier.
 - The package path directory name `arilinemanangmentsystem` appears in the tree; verify package declarations in source files if you reorganize folders.
