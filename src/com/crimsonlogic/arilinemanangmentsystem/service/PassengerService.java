@@ -42,6 +42,19 @@ public class PassengerService {
                 System.out.println(e.getMessage());
             }
         }
+        String password;
+        while (true) {
+            try {
+                password = input.getString("Enter password : ");
+                if(password.equals("0")){
+                    throw  new Exception(" 0 can't be password");
+                }
+
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
 
         String passengerId = IdGenerator.generatePassengerId();
 
@@ -52,7 +65,8 @@ public class PassengerService {
                 name,
                 email,
                 phone,
-                loyalty
+                loyalty,
+                password
         );
 
         passengers.put(passengerId, passenger);

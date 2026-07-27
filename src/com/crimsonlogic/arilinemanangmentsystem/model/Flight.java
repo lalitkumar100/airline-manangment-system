@@ -228,4 +228,65 @@ public class Flight {
 
         return null;
     }
+
+    /**
+     * Checks whether seats are available in this flight.
+     */
+    public boolean hasAvailableSeat() {
+
+        if (!(STATUS_COMPLETED.equalsIgnoreCase(status)
+                || STATUS_FLEW.equalsIgnoreCase(status))) {
+
+            System.out.println("Flight Status : " + status);
+            System.out.println("Tickets are not generated yet.");
+            return false;
+        }
+
+        int capacity = aircraft.getCapacity();
+        int bookedSeats = tickets.size();
+        int availableSeats = capacity - bookedSeats;
+
+        System.out.println("\n========== SEAT AVAILABILITY ==========");
+        System.out.println("Flight ID         : " + flightId);
+        System.out.println("Aircraft Capacity : " + capacity);
+        System.out.println("Booked Seats      : " + bookedSeats);
+        System.out.println("Available Seats   : " + availableSeats);
+
+        if (availableSeats > 0) {
+
+            System.out.println("Seats Available.");
+            return true;
+        }
+
+        System.out.println("Flight Full.");
+        return false;
+    }
+
+    public boolean hasAvailableSeatbyType() {
+
+        if (!(status.equalsIgnoreCase(STATUS_SCHEDULED)
+                || status.equalsIgnoreCase(STATUS_DELAYED))) {
+
+            System.out.println("\nFlight Status : " + status);
+            System.out.println("Booking is not allowed.");
+            return false;
+        }
+
+        int capacity = aircraft.getCapacity();
+        int booked = bookings.size();
+        int available = capacity - booked;
+
+        System.out.println("\n========== SEAT STATUS ==========");
+        System.out.println("Aircraft Capacity : " + capacity);
+        System.out.println("Booked Seats      : " + booked);
+        System.out.println("Available Seats   : " + available);
+
+        if (available <= 0) {
+
+            System.out.println("Flight is Full.");
+            return false;
+        }
+
+        return true;
+    }
 }

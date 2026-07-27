@@ -84,13 +84,14 @@ public class FlightService {
     public void addFlight() {
 
         try {
-
+              airportAircraftService.displayAllAircraft();
             System.out.println("\n========== ADD FLIGHT ==========");
 
             String flightId = IdGenerator.generateFlightId();
 
             Aircraft aircraft = readAircraft("Enter Aircraft ID : ");
 
+            airportAircraftService.displayAllAirports();
             Airport source = readAirport("Enter Source Airport Code : ");
 
             Airport destination = readAirport("Enter Destination Airport Code : ");
@@ -657,6 +658,7 @@ public class FlightService {
             flight.displayInfo();
         }
     }
+
 
 
 }

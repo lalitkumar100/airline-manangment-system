@@ -5,6 +5,7 @@ import com.crimsonlogic.arilinemanangmentsystem.exception.InvalidInputException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
@@ -111,16 +112,23 @@ public class InputUtil {
 
     public LocalDateTime getDateTime(String message) {
 
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+
         while (true) {
 
             try {
 
-                System.out.print(message + " (yyyy-MM-ddTHH:mm:ss): ");
-                return LocalDateTime.parse(sc.nextLine());
+                System.out.print(message + " (dd-MM-yyyy HH:mm): ");
+
+                String input = sc.nextLine().trim();
+
+                return LocalDateTime.parse(input, formatter);
 
             } catch (DateTimeParseException e) {
 
-                System.out.println("Invalid format. Example: 2026-07-25T15:30:00");
+                System.out.println("Invalid format.");
+                System.out.println("Example : 30-07-2026 10:30");
             }
         }
     }

@@ -65,7 +65,7 @@ public class BookingService {
             }
 
             flight.displayInfo();
-
+            flight.hasAvailableSeatbyType();
             Passenger passenger = null;
 
             while (true) {
@@ -80,6 +80,19 @@ public class BookingService {
                 try {
 
                     passenger = passengerService.getPassengerById(passengerId);
+                    while(true){
+                        String password = input.getString(
+                                "Enter Passenger Password (0 to Cancel): ");
+                        if (password.equals("0")) {
+                            return;
+                        }
+                        if(passenger.verifyPassword(password)){
+                            System.out.println("login!!!!!!");
+                            break;
+                        }
+                        System.out.println("password is wrong!!");
+
+                    }
                     passenger.displayInfo();
                     boolean alreadyBooked = false;
 
@@ -497,6 +510,20 @@ public class BookingService {
             try {
 
                 booking = getBookingById(bookingId);
+                Passenger passenger = booking.getPassenger();
+                while(true){
+                    String password = input.getString(
+                            "Enter Passenger Password  (0 to Cancel): ");
+                    if (password.equals("0")) {
+                        return;
+                    }
+                    if(passenger.verifyPassword(password)){
+                        System.out.println("login!!!!!!");
+                        break;
+                    }
+                    System.out.println("password is wrong!!");
+
+                }
                 break;
 
             } catch (Exception e) {
@@ -524,6 +551,22 @@ public class BookingService {
         try {
 
             Booking booking = readBooking();
+
+            Passenger passenger = booking.getPassenger();
+
+            while(true){
+                String password = input.getString(
+                        "Enter Passenger Password (0 to Cancel): ");
+                if (password.equals("0")) {
+                    return;
+                }
+                if(passenger.verifyPassword(password)){
+                    System.out.println("login!!!!!!");
+                    break;
+                }
+                System.out.println("password is wrong!!");
+
+            }
 
             if (booking == null) {
                 return;
@@ -770,6 +813,22 @@ public class BookingService {
 
             try {
                 Booking booking = getBookingById(bookingId);
+                Passenger passenger =booking.getPassenger();
+
+                while(true){
+                    String password = input.getString(
+                            "Enter Passenger Password  (0 to Cancel): ");
+                    if (password.equals("0")) {
+                        return;
+                    }
+                    if(passenger.verifyPassword(password)){
+                        System.out.println("login!!!!!!");
+                        break;
+                    }
+                    System.out.println("password is wrong!!");
+
+                }
+
                  if(booking.getBookingstatus().equals(Booking.STATUS_CONFIRMED)) {
 
                      booking.passengerCheckIn = true;

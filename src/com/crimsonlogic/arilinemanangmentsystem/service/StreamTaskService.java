@@ -68,7 +68,9 @@ public class StreamTaskService {
             System.out.println("24. Find Overbooked Flights");
             System.out.println("25. Find Empty Flights");
             System.out.println("28. Fare Summary Statistics");
+            System.out.println("29. Any seats available?");
             System.out.println("30. All Flights Departed?");
+            System.out.println("31. flatMapPassengersFromBookings");
             System.out.println("0. Back");
 
             int choice = input.getInt("Enter Choice : ");
@@ -181,6 +183,13 @@ public class StreamTaskService {
                     findEmptyFlights();
                     break;
 
+                case 31:
+                    flatMapPassengersFromBookings();
+                    break;
+
+                case 29:
+                    anySeatsAvailable();
+                    break;
                 case 0:
                     return;
 
@@ -795,5 +804,75 @@ public class StreamTaskService {
                             flight.getDepartureDateTime().isAfter(now))
                     .forEach(Flight::displayInfo);
         }
+    }
+
+    /**
+     * 29. Any Seats Available?
+     */
+    public void anySeatsAvailable() {
+
+        while (true) {
+
+            try {
+
+                flightService.displayAllFlights();
+
+                String flightId =
+                        input.getString("Enter Flight ID (0 to Cancel) : ");
+
+                if (flightId.equals("0")) {
+                    return;
+                }
+
+                Flight flight = flightService.findFlightById(flightId);
+
+                flight.hasAvailableSeat();
+
+                return;
+
+            } catch (Exception e) {
+
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * 31. FlatMap Passengers From Bookings.
+     */
+    /**
+     * 31. FlatMap Passengers From Bookings.
+     */
+    public void flatMapPassengersFromBookings() {
+
+        System.out.println("\n================ PASSENGERS FROM BOOKINGS ================");
+
+        System.out.printf("%-10s %-10s %-12s %-20s %-12s %-8s %-10s%n",
+                "Flight",
+                "Booking",
+                "Passenger",
+                "Name",
+                "Seat",
+                "Points",
+                "Tier");
+
+        System.out.println("-----------------------------------------------------------------------------------------------");
+
+        flightService.getFlightList()
+                .stream()
+                .flatMap(flight -> flight.getBookings().stream())
+                .forEach(booking -> {
+
+                    Passenger passenger = booking.getPassenger();
+
+                    System.out.printf("%-10s %-10s %-12s %-20s %-12s %-8d %-10s%n",
+                            booking.getFlightBooked().getFlightId(),
+                            booking.getBookingId(),
+                            passenger.getPassengerId(),
+                            passenger.getName(),
+                            booking.getSeatType(),
+                            passenger.getLoyalty().getPoints(),
+                            passenger.getLoyalty().getTier());
+                });
     }
 }

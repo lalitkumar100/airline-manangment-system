@@ -39,7 +39,6 @@ public class Menu {
             System.out.println("==========================================");
             System.out.println("1. Admin");
             System.out.println("2. Passenger");
-            System.out.println("3. Stream");
             System.out.println("0. Exit");
 
             int choice = input.getInt("Enter Choice : ");
@@ -52,9 +51,6 @@ public class Menu {
 
                 case 2:
                     passengerMenu();
-                    break;
-                case 3:
-                    streamTaskService.streamMenu();
                     break;
 
                 case 0:
@@ -72,11 +68,23 @@ public class Menu {
      */
     private void adminMenu() {
 
+        String password = input.getString("Enter Admin Password (0 to Back) : ");
+
+        if (password.equals("0")) {
+            return;
+        }
+
+        if (!password.equals("12345")) {
+            System.out.println("Invalid Password. Returning to Main Menu...");
+            return;
+        }
+
         while (true) {
 
             System.out.println("\n========== ADMIN MENU ==========");
             System.out.println("1. Flight Management");
-            System.out.println("2.  Report & Booking");
+            System.out.println("2. Report & Booking");
+            System.out.println("3. Dashboard Info");
             System.out.println("0. Back");
 
             int choice = input.getInt("Enter Choice : ");
@@ -89,6 +97,9 @@ public class Menu {
 
                 case 2:
                     ReportandBookingMenu();
+                    break;
+                case 3:
+                    streamTaskService.streamMenu();
                     break;
 
                 case 0:
