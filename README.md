@@ -100,6 +100,48 @@ If compilation fails due to package / folder structure mismatches, make sure the
 - Utility: InputUtil (console input helpers), IdGenerator (unique id creation), ValidatorUtil / FlightValidator
 - Exception: ValidationException and specialized exceptions (InvalidInputException, InvalidHumanException, InvalidCrewException), RecordNotFoundException
 
+## use cases Diagram
+flowchart TD
+
+    A([Start]) --> B[Main Menu]
+
+    B -->|1. Admin| C[Admin Menu]
+    B -->|2. Passenger| D[Passenger Menu]
+    B -->|3. Stream| E[Stream Tasks]
+    B -->|0. Exit| Z([End])
+
+    %% Admin Flow
+    C --> F[Flight Management]
+    C --> G[Report & Booking]
+    C --> B
+
+    %% Flight Management
+    F --> F1[Add Flight]
+    F --> F2[Update Flight]
+    F --> F3[Remove Flight]
+    F --> F4[Search Flight]
+    F --> F5[Display All Flights]
+    F --> F6[Generate Tickets]
+    F --> C
+
+    %% Report & Booking
+    G --> G1[View All Bookings]
+    G --> G2[View Flight Bookings]
+    G --> G3[Find Booking By ID]
+    G --> G4[Revenue Report]
+    G --> C
+
+    %% Passenger Flow
+    D --> P1[Search Flights]
+    D --> P2[Book Ticket]
+    D --> P3[Cancel Booking]
+    D --> P4[View Ticket]
+    D --> P5[Register Passenger]
+    D --> P6[Generate Boarding Pass]
+    D --> P7[Check-In]
+    D --> B
+
+
 ## Known issues / notes
 - There is no build file (Maven/Gradle); the repo uses plain source files. Adding a build system (Maven or Gradle) would make compilation and dependency management easier.
 - The package path directory name `arilinemanangmentsystem` appears in the tree; verify package declarations in source files if you reorganize folders.
@@ -121,8 +163,4 @@ Contributions are welcome. Suggested workflow:
 ## Contact / Author
 Repository owner: @lalitkumar100 (GitHub)
 
----
 
-If you want, I can commit this README.md into the repository now. I can also:
-- add the Mermaid UML diagram file I prepared earlier as `uml_class_diagram.mmd`, or
-- create a Maven pom.xml and a basic project structure so the code builds cleanly with Maven.
