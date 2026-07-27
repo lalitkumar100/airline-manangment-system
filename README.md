@@ -102,45 +102,99 @@ If compilation fails due to package / folder structure mismatches, make sure the
 
 ## use cases Diagram
 flowchart TD
-```mermaid
+
+flowchart TD
+
     A([Start]) --> B[Main Menu]
 
     B -->|1. Admin| C[Admin Menu]
     B -->|2. Passenger| D[Passenger Menu]
-    B -->|3. Stream| E[Stream Tasks]
+    B -->|3. Stream API Tasks| E[Stream Menu]
     B -->|0. Exit| Z([End])
 
-    %% Admin Flow
-    C --> F[Flight Management]
-    C --> G[Report & Booking]
-    C --> B
+%%======================
+%% ADMIN
+%%======================
 
-    %% Flight Management
+    C -->|1| F[Flight Management]
+    C -->|2| G[Booking & Reports]
+    C -->|0| B
+
+%%======================
+%% FLIGHT MANAGEMENT
+%%======================
+
     F --> F1[Add Flight]
     F --> F2[Update Flight]
     F --> F3[Remove Flight]
     F --> F4[Search Flight]
     F --> F5[Display All Flights]
     F --> F6[Generate Tickets]
-    F --> C
+    F -->|0| C
 
-    %% Report & Booking
-    G --> G1[View All Bookings]
-    G --> G2[View Flight Bookings]
-    G --> G3[Find Booking By ID]
+    F4 --> FS1[Search By Flight ID]
+    F4 --> FS2[Search By Source & Destination]
+    F4 --> FS3[Search By Source Destination & Date]
+    F4 --> F
+
+%%======================
+%% BOOKING & REPORTS
+%%======================
+
+    G --> G1[Display All Bookings]
+    G --> G2[Display Flight Bookings]
+    G --> G3[Search Booking By ID]
     G --> G4[Revenue Report]
-    G --> C
+    G -->|0| C
 
-    %% Passenger Flow
+%%======================
+%% PASSENGER
+%%======================
+
     D --> P1[Search Flights]
     D --> P2[Book Ticket]
     D --> P3[Cancel Booking]
-    D --> P4[View Ticket]
+    D --> P4[Update Seat]
     D --> P5[Register Passenger]
     D --> P6[Generate Boarding Pass]
-    D --> P7[Check-In]
-    D --> B
-```
+    D --> P7[Check In Passenger]
+    D -->|0| B
+
+%%======================
+%% STREAM API
+%%======================
+
+    E --> S1[List Available Flights]
+    E --> S2[Filter Flights By Destination]
+    E --> S3[Filter Delayed Flights]
+    E --> S4[Sort Flights By Departure]
+    E --> S5[Highest Ticket Fare]
+    E --> S6[Lowest Ticket Fare]
+    E --> S7[Average Ticket Fare]
+    E --> S8[Group Flights By Destination]
+    E --> S9[Sort Passengers By Loyalty]
+    E --> S10[Group Passengers By Tier]
+    E --> S11[Highest Spending Passenger]
+    E --> S12[Count Passengers Per Route]
+    E --> S13[Total Ticket Revenue]
+    E --> S14[Total Refund Amount]
+    E --> S15[Top Revenue Flights]
+    E --> S16[Distinct Aircraft Types]
+    E --> S17[Earliest Departure]
+    E --> S18[Latest Arrival]
+    E --> S19[Distinct Destinations]
+    E --> S20[Cancelled Bookings]
+    E --> S21[Group Bookings By Status]
+    E --> S22[Booking Count Per Flight]
+    E --> S23[Most Booked Flight]
+    E --> S24[Overbooked Flights]
+    E --> S25[Empty Flights]
+    E --> S26[Fare Summary Statistics]
+    E --> S27[All Flights Departed]
+    E --> S28[Any Seats Available]
+    E --> S29[FlatMap Passengers From Bookings]
+    E --> S30[Immutable Flight List]
+    E -->|0| B
 
 ##flowchart LR
 ```mermaid
