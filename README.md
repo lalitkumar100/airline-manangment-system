@@ -102,23 +102,25 @@ If compilation fails due to package / folder structure mismatches, make sure the
 
 ## use cases Diagram
 flowchart TD
-
+```mermaid
 flowchart TD
 
-```mermaid
     A([Start]) --> B[Main Menu]
 
     B -->|1. Admin| C[Admin Menu]
     B -->|2. Passenger| D[Passenger Menu]
-    B -->|3. Stream API Tasks| E[Stream Menu]
+    B -->|3. Stream API Tasks| E[Stream API Menu]
     B -->|0. Exit| Z([End])
+
+    %% ==========================
+    %% ADMIN MENU
+    %% ==========================
 
     C -->|1| F[Flight Management]
     C -->|2| G[Booking & Reports]
     C -->|0| B
 
-
-
+    %% Flight Management
     F --> F1[Add Flight]
     F --> F2[Update Flight]
     F --> F3[Remove Flight]
@@ -127,20 +129,22 @@ flowchart TD
     F --> F6[Generate Tickets]
     F -->|0| C
 
-    F4 --> FS1[Search By Flight ID]
-    F4 --> FS2[Search By Source & Destination]
-    F4 --> FS3[Search By Source Destination & Date]
-    F4 --> F
+    %% Search Flight
+    F4 --> FS1[Search by Flight ID]
+    F4 --> FS2[Search by Source & Destination]
+    F4 --> FS3[Search by Source, Destination & Date]
+    F4 -->|0| F
 
-
-
+    %% Booking & Reports
     G --> G1[Display All Bookings]
     G --> G2[Display Flight Bookings]
-    G --> G3[Search Booking By ID]
+    G --> G3[Search Booking by ID]
     G --> G4[Revenue Report]
     G -->|0| C
 
-
+    %% ==========================
+    %% PASSENGER MENU
+    %% ==========================
 
     D --> P1[Search Flights]
     D --> P2[Book Ticket]
@@ -148,22 +152,25 @@ flowchart TD
     D --> P4[Update Seat]
     D --> P5[Register Passenger]
     D --> P6[Generate Boarding Pass]
-    D --> P7[Check In Passenger]
+    D --> P7[Check-In Passenger]
     D -->|0| B
 
+    %% ==========================
+    %% STREAM API MENU
+    %% ==========================
 
     E --> S1[List Available Flights]
-    E --> S2[Filter Flights By Destination]
+    E --> S2[Filter Flights by Destination]
     E --> S3[Filter Delayed Flights]
-    E --> S4[Sort Flights By Departure]
+    E --> S4[Sort Flights by Departure Time]
     E --> S5[Highest Ticket Fare]
     E --> S6[Lowest Ticket Fare]
     E --> S7[Average Ticket Fare]
-    E --> S8[Group Flights By Destination]
-    E --> S9[Sort Passengers By Loyalty]
-    E --> S10[Group Passengers By Tier]
+    E --> S8[Group Flights by Destination]
+    E --> S9[Sort Passengers by Loyalty Points]
+    E --> S10[Group Passengers by Loyalty Tier]
     E --> S11[Highest Spending Passenger]
-    E --> S12[Count Passengers Per Route]
+    E --> S12[Count Passengers per Route]
     E --> S13[Total Ticket Revenue]
     E --> S14[Total Refund Amount]
     E --> S15[Top Revenue Flights]
@@ -172,66 +179,18 @@ flowchart TD
     E --> S18[Latest Arrival]
     E --> S19[Distinct Destinations]
     E --> S20[Cancelled Bookings]
-    E --> S21[Group Bookings By Status]
-    E --> S22[Booking Count Per Flight]
+    E --> S21[Group Bookings by Status]
+    E --> S22[Booking Count per Flight]
     E --> S23[Most Booked Flight]
     E --> S24[Overbooked Flights]
     E --> S25[Empty Flights]
     E --> S26[Fare Summary Statistics]
     E --> S27[All Flights Departed]
     E --> S28[Any Seats Available]
-    E --> S29[FlatMap Passengers From Bookings]
+    E --> S29[FlatMap Passengers from Bookings]
     E --> S30[Immutable Flight List]
     E -->|0| B
 ```
-##flowchart LR
-```mermaid
-    Admin([Admin])
-    Passenger([Passenger])
-
-    subgraph Airline Management System
-
-        UC1(Add Flight)
-        UC2(Update Flight)
-        UC3(Remove Flight)
-        UC4(Search Flight)
-        UC5(Display All Flights)
-        UC6(Generate Tickets)
-
-        UC7(View All Bookings)
-        UC8(View Flight Bookings)
-        UC9(Find Booking By ID)
-        UC10(Revenue Report)
-
-        UC11(Register Passenger)
-        UC12(Book Ticket)
-        UC13(Cancel Booking)
-        UC14(View Ticket)
-        UC15(Generate Boarding Pass)
-        UC16(Check-In)
-
-    end
-
-    Admin --> UC1
-    Admin --> UC2
-    Admin --> UC3
-    Admin --> UC4
-    Admin --> UC5
-    Admin --> UC6
-    Admin --> UC7
-    Admin --> UC8
-    Admin --> UC9
-    Admin --> UC10
-
-    Passenger --> UC4
-    Passenger --> UC11
-    Passenger --> UC12
-    Passenger --> UC13
-    Passenger --> UC14
-    Passenger --> UC15
-    Passenger --> UC16
-```
-
 
 
 ```mermaid
