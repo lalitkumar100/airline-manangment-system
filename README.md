@@ -105,6 +105,7 @@ flowchart TD
 
 flowchart TD
 
+```mermaid
     A([Start]) --> B[Main Menu]
 
     B -->|1. Admin| C[Admin Menu]
@@ -112,17 +113,11 @@ flowchart TD
     B -->|3. Stream API Tasks| E[Stream Menu]
     B -->|0. Exit| Z([End])
 
-%%======================
-%% ADMIN
-%%======================
-
     C -->|1| F[Flight Management]
     C -->|2| G[Booking & Reports]
     C -->|0| B
 
-%%======================
-%% FLIGHT MANAGEMENT
-%%======================
+
 
     F --> F1[Add Flight]
     F --> F2[Update Flight]
@@ -137,9 +132,7 @@ flowchart TD
     F4 --> FS3[Search By Source Destination & Date]
     F4 --> F
 
-%%======================
-%% BOOKING & REPORTS
-%%======================
+
 
     G --> G1[Display All Bookings]
     G --> G2[Display Flight Bookings]
@@ -147,9 +140,7 @@ flowchart TD
     G --> G4[Revenue Report]
     G -->|0| C
 
-%%======================
-%% PASSENGER
-%%======================
+
 
     D --> P1[Search Flights]
     D --> P2[Book Ticket]
@@ -160,9 +151,6 @@ flowchart TD
     D --> P7[Check In Passenger]
     D -->|0| B
 
-%%======================
-%% STREAM API
-%%======================
 
     E --> S1[List Available Flights]
     E --> S2[Filter Flights By Destination]
@@ -195,7 +183,7 @@ flowchart TD
     E --> S29[FlatMap Passengers From Bookings]
     E --> S30[Immutable Flight List]
     E -->|0| B
-
+```
 ##flowchart LR
 ```mermaid
     Admin([Admin])
