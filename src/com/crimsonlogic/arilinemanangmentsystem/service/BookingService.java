@@ -136,18 +136,58 @@ public class BookingService {
                 switch (seatType) {
 
                     case "A":
+
                         amount = flight.getBaseFare() * 1.50;
+
+                        if (flight.getAvailableASeats() > 0) {
+
+                            System.out.println("\nA Class Seat Available.");
+                            System.out.println("Your booking will be CONFIRMED after ticket generation.");
+
+                        } else {
+
+                            System.out.println("\nA Class Full.");
+                            System.out.println("You will be placed in the WAITLIST.");
+                        }
+
                         break;
 
                     case "B":
+
                         amount = flight.getBaseFare() * 1.20;
+
+                        if (flight.getAvailableBSeats() > 0) {
+
+                            System.out.println("\nB Class Seat Available.");
+                            System.out.println("Your booking will be CONFIRMED after ticket generation.");
+
+                        } else {
+
+                            System.out.println("\nB Class Full.");
+                            System.out.println("You will be placed in the WAITLIST.");
+                        }
+
                         break;
 
                     case "C":
+
                         amount = flight.getBaseFare();
+
+                        if (flight.getAvailableCSeats() > 0) {
+
+                            System.out.println("\nC Class Seat Available.");
+                            System.out.println("Your booking will be CONFIRMED after ticket generation.");
+
+                        } else {
+
+                            System.out.println("\nC Class Full.");
+                            System.out.println("You will be placed in the WAITLIST.");
+                        }
+
                         break;
 
                     default:
+
                         System.out.println("Invalid Seat Type.");
                         continue;
                 }

@@ -6,6 +6,10 @@ import java.util.PriorityQueue;
 
 public class Flight {
 
+    private int bookedASeats;
+    private int bookedBSeats;
+    private int bookedCSeats;
+
     public static final String STATUS_SCHEDULED = "Scheduled";
     public static final String STATUS_DELAYED = "Delayed";
     public static final String STATUS_CANCELLED = "Cancelled";
@@ -117,7 +121,23 @@ public class Flight {
         return tickets;
     }
     public void addBookings(Booking booking) {
-         bookings.add(booking);
+
+        bookings.add(booking);
+
+        switch (booking.getSeatType().toUpperCase()) {
+
+            case "A":
+                bookedASeats++;
+                break;
+
+            case "B":
+                bookedBSeats++;
+                break;
+
+            case "C":
+                bookedCSeats++;
+                break;
+        }
     }
 
     public PriorityQueue<Booking> getWaitLsit() {
@@ -193,6 +213,21 @@ public class Flight {
 
         bookings.remove(booking);
         waitLsit.remove(booking);
+
+        switch (booking.getSeatType().toUpperCase()) {
+
+            case "A":
+                bookedASeats--;
+                break;
+
+            case "B":
+                bookedBSeats--;
+                break;
+
+            case "C":
+                bookedCSeats--;
+                break;
+        }
     }
 
     /**
@@ -262,6 +297,9 @@ public class Flight {
         return false;
     }
 
+    /**
+     * Displays seat availability by class.
+     */
     public boolean hasAvailableSeatbyType() {
 
         if (!(status.equalsIgnoreCase(STATUS_SCHEDULED)
@@ -273,20 +311,90 @@ public class Flight {
         }
 
         int capacity = aircraft.getCapacity();
-        int booked = bookings.size();
-        int available = capacity - booked;
+
+        int aTotal = capacity * 20 / 100;
+        int bTotal = capacity * 30 / 100;
+        int cTotal = capacity - aTotal - bTotal;
+
+        long aBooked = bookings.stream()
+                .filter(b -> b.getSeatType().equalsIgnoreCase("A"))
+                .count();
+
+        long bBooked = bookings.stream()
+                .filter(b -> b.getSeatType().equalsIgnoreCase("B"))
+                .count();
+
+        long cBooked = bookings.stream()
+                .filter(b -> b.getSeatType().equalsIgnoreCase("C"))
+                .count();
+
+        int totalBooked = bookings.size();
+        int totalAvailable = capacity - totalBooked;
 
         System.out.println("\n========== SEAT STATUS ==========");
         System.out.println("Aircraft Capacity : " + capacity);
-        System.out.println("Booked Seats      : " + booked);
-        System.out.println("Available Seats   : " + available);
+        System.out.println("Booked Seats      : " + totalBooked);
+        System.out.println("Available Seats   : " + totalAvailable);
 
-        if (available <= 0) {
+        System.out.printf("%n%-10s %-10s %-10s %-10s%n",
+                "Class", "Total", "Booked", "Available");
+        System.out.println("--------------------------------------------");
 
-            System.out.println("Flight is Full.");
-            return false;
+        System.out.printf("%-10s %-10d %-10d %-10d%n",
+                "A",
+                aTotal,
+                aBooked,
+                Math.max(0, aTotal - (int) aBooked));
+
+        System.out.printf("%-10s %-10d %-10d %-10d%n",
+                "B",
+                bTotal,
+                bBooked,
+                Math.max(0, bTotal - (int) bBooked));
+
+        System.out.printf("%-10s %-10d %-10d %-10d%n",
+                "C",
+                cTotal,
+                cBooked,
+                Math.max(0, cTotal - (int) cBooked));
+
+        if (totalAvailable <= 0) {
+
+            System.out.println("\nFlight is Full.");
+            System.out.println("New bookings will be placed in Waiting List.");
         }
 
-        return true;
+        return totalAvailable > 0;
+    }
+
+    public int getACapacity() {
+
+        return aircraft.getCapacity() * 20 / 100;
+    }
+
+    public int getBCapacity() {
+
+        return aircraft.getCapacity() * 30 / 100;
+    }
+
+    public int getCCapacity() {
+
+        return aircraft.getCapacity()
+                - getACapacity()
+                - getBCapacity();
+    }
+    public int getAvailableASeats() {
+
+        return getACapacity() - bookedASeats;
+    }
+
+    public int getAvailableBSeats() {
+
+        return getBCapacity() - bookedBSeats;
+    }
+
+    public int getAvailableCSeats() {
+
+        return getCCapacity() - bookedCSeats;
     }
 }
