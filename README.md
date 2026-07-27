@@ -102,7 +102,7 @@ If compilation fails due to package / folder structure mismatches, make sure the
 
 ## use cases Diagram
 flowchart TD
-
+```mermaid
     A([Start]) --> B[Main Menu]
 
     B -->|1. Admin| C[Admin Menu]
@@ -140,8 +140,55 @@ flowchart TD
     D --> P6[Generate Boarding Pass]
     D --> P7[Check-In]
     D --> B
+```
 
+##flowchart LR
+```mermaid
+    Admin([Admin])
+    Passenger([Passenger])
 
+    subgraph Airline Management System
+
+        UC1(Add Flight)
+        UC2(Update Flight)
+        UC3(Remove Flight)
+        UC4(Search Flight)
+        UC5(Display All Flights)
+        UC6(Generate Tickets)
+
+        UC7(View All Bookings)
+        UC8(View Flight Bookings)
+        UC9(Find Booking By ID)
+        UC10(Revenue Report)
+
+        UC11(Register Passenger)
+        UC12(Book Ticket)
+        UC13(Cancel Booking)
+        UC14(View Ticket)
+        UC15(Generate Boarding Pass)
+        UC16(Check-In)
+
+    end
+
+    Admin --> UC1
+    Admin --> UC2
+    Admin --> UC3
+    Admin --> UC4
+    Admin --> UC5
+    Admin --> UC6
+    Admin --> UC7
+    Admin --> UC8
+    Admin --> UC9
+    Admin --> UC10
+
+    Passenger --> UC4
+    Passenger --> UC11
+    Passenger --> UC12
+    Passenger --> UC13
+    Passenger --> UC14
+    Passenger --> UC15
+    Passenger --> UC16
+```
 ## Known issues / notes
 - There is no build file (Maven/Gradle); the repo uses plain source files. Adding a build system (Maven or Gradle) would make compilation and dependency management easier.
 - The package path directory name `arilinemanangmentsystem` appears in the tree; verify package declarations in source files if you reorganize folders.
